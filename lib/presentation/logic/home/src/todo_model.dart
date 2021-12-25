@@ -4,7 +4,7 @@ part 'todo_model.g.dart';
 
 class TodoModel = _TodoModel with _$TodoModel;
 
-abstract class _TodoModel with Store{
+abstract class _TodoModel with Store {
 
   final String description;
 

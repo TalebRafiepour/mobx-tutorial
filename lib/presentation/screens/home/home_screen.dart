@@ -22,6 +22,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     _disposer = reaction((_) => homeStore.alertMessage, (String? message) {
       if (message != null) {
+        // showModalBottomSheet(context: context, builder: (ctx) {
+        //   return Text(message);
+        // });
         _scaffoldMessengerKey.currentState?.showSnackBar(SnackBar(
           content: Text(message),
         ));
