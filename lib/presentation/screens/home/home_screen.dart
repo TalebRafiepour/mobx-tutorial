@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
+import 'package:todo_mobx/data/models/login/src/user_model.dart';
+import 'package:todo_mobx/data/providers/storage/secure_storage.dart';
 import 'package:todo_mobx/presentation/logic/home/src/home_store.dart';
 
 import 'widgets/todo_input_field.dart';
@@ -45,7 +47,16 @@ class _HomeScreenState extends State<HomeScreen> {
       key: _scaffoldMessengerKey,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('ToDo'),
+          title: FutureBuilder<UserModel?>(
+            future: SecureStorage().getUserData(),
+            builder: (context,AsyncSnapshot<UserModel?> snapShot) {
+              if(snapShot.connectionState == ConnectionState.done) {
+                return Text('ToDo ${snapShot.data?.firstName ?? '---'}');
+              }else {
+                return const Text('ToDo');
+              }
+            }
+          ),
         ),
         body: Column(
           children: [

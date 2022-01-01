@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:todo_mobx/data/models/login/src/login_response.dart';
 import 'package:todo_mobx/services/http_client/index.dart';
 
 class UserApi {
@@ -9,7 +10,7 @@ class UserApi {
 
   UserApi(this._httpClient);
 
-  Future<bool> login(String email,String password) async {
+  Future<LoginResponse> login(String email,String password) async {
     final data = {
       'email': email,
       'password': password,
@@ -17,13 +18,6 @@ class UserApi {
     final dataJson = jsonEncode(data);
     final Response<dynamic> response = await _httpClient.post(loginPath, dataJson);
     print('result: ${response.data}, type: ${response.runtimeType}');
-    var result = response.data;
-    var token = result['token'];
-    //read json and save it in storage
-    if (token != null) {
-      return true;
-    } else {
-      return false;
-    }
+    return LoginResponse.fromJson(response.data);
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:todo_mobx/data/providers/api/user_api.dart';
+import 'package:todo_mobx/data/providers/storage/secure_storage.dart';
 import 'package:todo_mobx/data/repositories/login_repository.dart';
 import 'package:todo_mobx/presentation/logic/login/index.dart';
 import 'package:todo_mobx/presentation/screens/home/home_screen.dart';
@@ -21,7 +22,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    _loginStore = LoginStore(LoginRepository(UserApi(HttpClient())));
+    _loginStore =
+        LoginStore(LoginRepository(UserApi(HttpClient()), SecureStorage()));
     _disposer =
         reaction((_) => _loginStore.loginState, (LoginState loginState) {
       print('reaction loginState: $loginState');
