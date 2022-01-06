@@ -16,7 +16,7 @@ class UserApi {
       'password': password,
     };
     final dataJson = jsonEncode(data);
-    final Response<dynamic> response = await _httpClient.post(loginPath, dataJson);
+    final Response<dynamic> response = await _httpClient.post(path: loginPath,data: dataJson);
     print('result: ${response.data}, type: ${response.runtimeType}');
     return LoginResponse.fromJson(response.data);
   }

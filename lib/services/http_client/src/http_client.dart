@@ -10,13 +10,18 @@ class HttpClient {
 
   factory HttpClient() => _singleton;
 
-  Future<dynamic> post(String path, [dynamic data]) {
-    return _dio.post(path, data: data);
+  Future<dynamic> post({required String path, dynamic data, Options? options}) {
+    return _dio.post(path, data: data, options: options);
   }
 
-  void get() {}
+  Future<dynamic> put({required String path, dynamic data, Options? options}) {
+    return _dio.put(path, data: data, options: options);
+  }
 
-  void put() {}
+  Future<Response<dynamic>> get(
+      {required String path, Options? options}) async {
+    return _dio.get(path, options: options);
+  }
 
   void delete() {}
 }

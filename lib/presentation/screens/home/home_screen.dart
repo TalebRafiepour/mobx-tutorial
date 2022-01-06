@@ -3,6 +3,7 @@ import 'package:mobx/mobx.dart';
 import 'package:todo_mobx/data/models/login/src/user_model.dart';
 import 'package:todo_mobx/data/providers/storage/secure_storage.dart';
 import 'package:todo_mobx/presentation/logic/home/src/home_store.dart';
+import 'package:todo_mobx/presentation/screens/profile/profile_screen.dart';
 
 import 'widgets/todo_input_field.dart';
 import 'widgets/todo_list.dart';
@@ -47,16 +48,24 @@ class _HomeScreenState extends State<HomeScreen> {
       key: _scaffoldMessengerKey,
       child: Scaffold(
         appBar: AppBar(
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.supervised_user_circle_rounded),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const ProfileScreen()));
+              },
+            )
+          ],
           title: FutureBuilder<UserModel?>(
-            future: SecureStorage().getUserData(),
-            builder: (context,AsyncSnapshot<UserModel?> snapShot) {
-              if(snapShot.connectionState == ConnectionState.done) {
-                return Text('ToDo ${snapShot.data?.firstName ?? '---'}');
-              }else {
-                return const Text('ToDo');
-              }
-            }
-          ),
+              future: SecureStorage().getUserData(),
+              builder: (context, AsyncSnapshot<UserModel?> snapShot) {
+                if (snapShot.connectionState == ConnectionState.done) {
+                  return Text('ToDo ${snapShot.data?.firstName ?? '---'}');
+                } else {
+                  return const Text('ToDo');
+                }
+              }),
         ),
         body: Column(
           children: [
