@@ -10,11 +10,15 @@ class ProfileImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Observer(builder: (_) {
-      return profileStore.profileImageState.when(loading: () {
-        return const SizedBox(
+      return profileStore.profileImageState.when(loading: (double percent) {
+        return SizedBox(
           height: 30,
           width: 30,
-          child: CircularProgressIndicator(),
+          child: CircularProgressIndicator(
+            value: percent,
+            valueColor: const AlwaysStoppedAnimation<Color>(Colors.amber),
+            backgroundColor: Colors.purple,
+          ),
         );
       }, error: (message) {
         return Container(

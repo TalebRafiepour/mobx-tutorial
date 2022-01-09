@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:dio/dio.dart';
 import 'package:todo_mobx/data/models/profile/profile_response.dart';
 import 'package:todo_mobx/data/providers/api/profile_api.dart';
 import 'package:todo_mobx/data/providers/storage/secure_storage.dart';
@@ -16,7 +17,7 @@ class ProfileRepository {
     return await _profileApi.getUserData(token);
   }
 
-  Future<Uint8List?> getUserProfileImage() async {
+  Future<Uint8List?> getUserProfileImage([ProgressCallback? onSendProgress]) async {
     final token = await _secureStorage.getUserToken();
     final userData = await _secureStorage.getUserData();
 
@@ -24,13 +25,13 @@ class ProfileRepository {
       throw Exception('token or user data is null');
     }
 
-    return _profileApi.getUserProfileImage(token, userData.id);
+    return _profileApi.getUserProfileImage(token, userData.id,onSendProgress);
   }
 
-  Future<void> uploadProfileImage(String profileImagePath) async {
+  Future<void> uploadProfileImage(String profileImagePath,[ProgressCallback? onSendProgress]) async {
     var token = await _secureStorage.getUserToken();
     if (token == null) throw Exception('token user is null');
 
-    await _profileApi.uploadProfileImage(token, profileImagePath);
+    await _profileApi.uploadProfileImage(token, profileImagePath,onSendProgress);
   }
 }

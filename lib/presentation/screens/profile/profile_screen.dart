@@ -6,6 +6,9 @@ import 'package:todo_mobx/presentation/logic/profile/index.dart';
 import 'package:todo_mobx/presentation/screens/profile/widgets/profile_image.dart';
 import 'package:todo_mobx/services/http_client/index.dart';
 
+import 'widgets/edit_profile_button.dart';
+import 'widgets/profile_data_form.dart';
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
@@ -30,9 +33,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         title: const Text('Profile'),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [ProfileImage(profileStore: _profileStore)],
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              ProfileImage(profileStore: _profileStore),
+              const SizedBox(height: 40,),
+              EditProfileButton(profileStore: _profileStore),
+              ProfileDataForm(profileStore: _profileStore),
+            ],
+          ),
+        ),
       ),
     );
   }

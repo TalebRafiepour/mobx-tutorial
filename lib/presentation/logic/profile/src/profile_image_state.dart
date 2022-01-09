@@ -4,7 +4,7 @@ part 'profile_image_state.freezed.dart';
 
 @freezed
 class ProfileImageState with _$ProfileImageState {
-  const factory ProfileImageState.loading() = Loading;
+  const factory ProfileImageState.loading(double progress) = Loading;
 
   const factory ProfileImageState.error(String message) = Error;
 

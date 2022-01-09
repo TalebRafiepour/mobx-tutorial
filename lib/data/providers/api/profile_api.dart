@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:todo_mobx/data/models/profile/profile_response.dart';
 import 'package:todo_mobx/services/http_client/index.dart';
 
@@ -36,32 +38,46 @@ class ProfileApi {
     return ProfileResponse.fromJson(response.data['data']);
   }
 
-  Future<Uint8List?> getUserProfileImage(String token, String userId) async {
-    final Response<dynamic> response = await _httpClient.get(
+  Future<Uint8List?> getUserProfileImage(String token, String userId,[ProgressCallback? onReceiveProgress]) async {
+    final tempDir = await getTemporaryDirectory();
+    const String profileImageName = 'profile.png';
+
+    final profileImage = File(tempDir.path + '/' + profileImageName);
+    if (await profileImage.exists()) {
+      await profileImage.delete();
+      await profileImage.create();
+    } else {
+      await profileImage.create();
+    }
+
+    final Response<dynamic> response = await _httpClient.download(
       path: '/user/$userId/avatar',
+      savePath: profileImage.path,
+      progressCallback: onReceiveProgress,
       options: Options(
         headers: {
           'Authorization': 'Bearer $token',
         },
       ),
     );
-    return response.data as Uint8List?;
+    final profileImageBytes = await profileImage.readAsBytes();
+    return profileImageBytes;
   }
 
-  Future<bool> uploadProfileImage(String token, String profileImagePath) async {
-    final Response<dynamic> response = await _httpClient.post(
-      path: '/me/avatar',
+  Future<bool> uploadProfileImage(String token, String profileImagePath,[ProgressCallback? onSendProgress]) async {
+    await _httpClient.post(
+      path: '/user/me/avatar',
+      onSendProgress: onSendProgress,
       data: FormData.fromMap({
-        'avatar': MultipartFile.fromString(profileImagePath,
-            filename: profileImagePath.split('/').last)
+        'avatar': await MultipartFile.fromFile(profileImagePath),
       }),
+
       options: Options(
         headers: {
           'Authorization': 'Bearer $token',
         },
       ),
     );
-    final result = response.data['success'];
-    return result;
+    return true;
   }
 }
