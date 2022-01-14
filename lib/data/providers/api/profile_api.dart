@@ -25,7 +25,12 @@ class ProfileApi {
   }
 
   Future<ProfileResponse> editUserData(
-      String token, Map<String, dynamic> data) async {
+      String token, String email,String name,int age) async {
+    Map<String, dynamic> data = {
+      'email': email,
+      'name': name,
+      'age': age,
+    };
     final Response<dynamic> response = await _httpClient.put(
       path: '/user/me',
       options: Options(

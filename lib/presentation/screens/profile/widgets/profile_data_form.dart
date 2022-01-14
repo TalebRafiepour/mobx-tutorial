@@ -13,6 +13,8 @@ class ProfileDataForm extends StatefulWidget {
 }
 
 class _ProfileDataFormState extends State<ProfileDataForm> {
+  final _formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     Future.microtask(() => widget.profileStore.getUserData());
@@ -22,6 +24,8 @@ class _ProfileDataFormState extends State<ProfileDataForm> {
   @override
   Widget build(BuildContext context) {
     return Form(
+      key: _formKey,
+      autovalidateMode: AutovalidateMode.always,
       child: Expanded(
         child: SingleChildScrollView(
             child: Container(
@@ -49,6 +53,8 @@ class _ProfileDataFormState extends State<ProfileDataForm> {
                             initialValue: userData.email,
                             textInputAction: TextInputAction.next,
                             keyboardType: TextInputType.emailAddress,
+                            validator: widget.profileStore.emailValidator,
+                            onSaved: widget.profileStore.saveEmail,
                             decoration:
                                 const InputDecoration(label: Text('Email')),
                           ),
@@ -56,6 +62,8 @@ class _ProfileDataFormState extends State<ProfileDataForm> {
                             initialValue: userData.firstName,
                             textInputAction: TextInputAction.next,
                             keyboardType: TextInputType.text,
+                            validator: widget.profileStore.nameValidator,
+                            onSaved: widget.profileStore.saveName,
                             decoration:
                                 const InputDecoration(label: Text('Name')),
                           ),
@@ -63,8 +71,15 @@ class _ProfileDataFormState extends State<ProfileDataForm> {
                             initialValue: userData.age.toString(),
                             textInputAction: TextInputAction.next,
                             keyboardType: TextInputType.number,
+                            validator: widget.profileStore.ageValidator,
+                            onSaved: widget.profileStore.saveAge,
                             decoration:
                                 const InputDecoration(label: Text('Age')),
+                          ),
+                          ElevatedButton.icon(
+                            onPressed: _saveForm,
+                            icon: const Icon(Icons.save),
+                            label: const Text('Save'),
                           ),
                         ]
                             .expand((element) => [
@@ -82,5 +97,12 @@ class _ProfileDataFormState extends State<ProfileDataForm> {
         )),
       ),
     );
+  }
+
+  void _saveForm() async {
+    if(_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      await widget.profileStore.putUserData();
+    }
   }
 }

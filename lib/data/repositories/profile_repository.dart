@@ -17,6 +17,12 @@ class ProfileRepository {
     return await _profileApi.getUserData(token);
   }
 
+  Future<ProfileResponse> putUserData(String email,String name, int age) async {
+    var token = await _secureStorage.getUserToken();
+    if (token == null) throw Exception('token user is null');
+    return await _profileApi.editUserData(token,email,name,age);
+  }
+
   Future<Uint8List?> getUserProfileImage([ProgressCallback? onSendProgress]) async {
     final token = await _secureStorage.getUserToken();
     final userData = await _secureStorage.getUserData();

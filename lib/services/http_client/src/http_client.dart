@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 
 class HttpClient {
   final Dio _dio =
-      Dio(BaseOptions(baseUrl: 'https://api-nodejs-todolist.herokuapp.com'));
+      Dio(BaseOptions(baseUrl: 'https://api-nodejs-todolist.herokuapp.com',receiveTimeout: 2*60*1000));
 
   static final HttpClient _singleton = HttpClient._();
 
