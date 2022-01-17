@@ -24,8 +24,19 @@ class ProfileApi {
     return ProfileResponse.fromJson(response.data);
   }
 
+  Future<void> logOut(String token) async {
+    return _httpClient.post(
+      path: '/user/logout',
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      ),
+    );
+  }
+
   Future<ProfileResponse> editUserData(
-      String token, String email,String name,int age) async {
+      String token, String email, String name, int age) async {
     Map<String, dynamic> data = {
       'email': email,
       'name': name,
@@ -43,7 +54,8 @@ class ProfileApi {
     return ProfileResponse.fromJson(response.data['data']);
   }
 
-  Future<Uint8List?> getUserProfileImage(String token, String userId,[ProgressCallback? onReceiveProgress]) async {
+  Future<Uint8List?> getUserProfileImage(String token, String userId,
+      [ProgressCallback? onReceiveProgress]) async {
     final tempDir = await getTemporaryDirectory();
     const String profileImageName = 'profile.png';
 
@@ -69,14 +81,14 @@ class ProfileApi {
     return profileImageBytes;
   }
 
-  Future<bool> uploadProfileImage(String token, String profileImagePath,[ProgressCallback? onSendProgress]) async {
+  Future<bool> uploadProfileImage(String token, String profileImagePath,
+      [ProgressCallback? onSendProgress]) async {
     await _httpClient.post(
       path: '/user/me/avatar',
       onSendProgress: onSendProgress,
       data: FormData.fromMap({
         'avatar': await MultipartFile.fromFile(profileImagePath),
       }),
-
       options: Options(
         headers: {
           'Authorization': 'Bearer $token',

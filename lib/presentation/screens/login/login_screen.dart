@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-import 'package:todo_mobx/data/providers/api/user_api.dart';
-import 'package:todo_mobx/data/providers/storage/secure_storage.dart';
 import 'package:todo_mobx/data/repositories/login_repository.dart';
+import 'package:todo_mobx/locator.dart';
 import 'package:todo_mobx/presentation/logic/login/index.dart';
 import 'package:todo_mobx/presentation/screens/home/home_screen.dart';
-import 'package:todo_mobx/services/http_client/index.dart';
+import 'package:todo_mobx/presentation/screens/signup/singup.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -22,8 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    _loginStore =
-        LoginStore(LoginRepository(UserApi(HttpClient()), SecureStorage()));
+    _loginStore = LoginStore(locator.get<LoginRepository>());
     _disposer =
         reaction((_) => _loginStore.loginState, (LoginState loginState) {
       print('reaction loginState: $loginState');
@@ -55,28 +53,62 @@ class _LoginScreenState extends State<LoginScreen> {
       child: ScaffoldMessenger(
         key: _scaffoldKey,
         child: Scaffold(
-          body: Column(
-            children: [
-              TextField(
-                keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(hintText: 'Email'),
-                onChanged: (value) {
-                  _loginStore.email = value;
-                },
-              ),
-              TextField(
-                obscureText: true,
-                decoration: const InputDecoration(hintText: 'Password'),
-                onChanged: (value) {
-                  _loginStore.password = value;
-                },
-              ),
-              ElevatedButton(
-                  onPressed: () {
-                    _loginStore.login();
+          appBar: AppBar(
+            title: const Text('Login'),
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              children: [
+                TextField(
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(hintText: 'Email'),
+                  onChanged: (value) {
+                    _loginStore.email = value;
                   },
-                  child: const Text('Login')),
-            ],
+                ),
+                TextField(
+                  obscureText: true,
+                  decoration: const InputDecoration(hintText: 'Password'),
+                  onChanged: (value) {
+                    _loginStore.password = value;
+                  },
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  height: 42,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        _loginStore.login();
+                      },
+                      child: const Text('Login')),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  height: 42,
+                  child: ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                          shadowColor:
+                              MaterialStateProperty.all(Colors.transparent)),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => const SignUpScreen()));
+                      },
+                      child: const Text(
+                        'SignUp',
+                        style: TextStyle(color: Colors.black),
+                      )),
+                ),
+              ],
+            ),
           ),
         ),
       ),

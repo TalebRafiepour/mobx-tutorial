@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:todo_mobx/presentation/screens/home/home_screen.dart';
-import 'package:todo_mobx/presentation/screens/login/login_screen.dart';
+import 'package:todo_mobx/locator.dart';
 import 'package:todo_mobx/presentation/screens/splash/splash_screen.dart';
 
 void main() {
+  setup();
   runApp(const MyApp());
 }
 

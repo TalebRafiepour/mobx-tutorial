@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:todo_mobx/data/providers/api/profile_api.dart';
-import 'package:todo_mobx/data/providers/storage/secure_storage.dart';
 import 'package:todo_mobx/data/repositories/profile_repository.dart';
+import 'package:todo_mobx/locator.dart';
 import 'package:todo_mobx/presentation/logic/profile/index.dart';
+import 'package:todo_mobx/presentation/screens/login/login_screen.dart';
 import 'package:todo_mobx/presentation/screens/profile/widgets/profile_image.dart';
-import 'package:todo_mobx/services/http_client/index.dart';
 
 import 'widgets/edit_profile_button.dart';
 import 'widgets/profile_data_form.dart';
@@ -21,8 +20,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void initState() {
-    _profileStore = ProfileStore(
-        ProfileRepository(ProfileApi(HttpClient()), SecureStorage()));
+    _profileStore = ProfileStore(locator.get<ProfileRepository>());
     Future.microtask(() => _profileStore.getProfileImage());
     super.initState();
   }
@@ -32,6 +30,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
+        actions: [
+          IconButton(
+              onPressed: () async {
+                await _profileStore.logOut();
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (_) => const LoginScreen()),
+                    (route) => false);
+              },
+              icon: const Icon(Icons.logout)),
+        ],
       ),
       body: Center(
         child: Padding(
@@ -42,7 +50,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               ProfileImage(profileStore: _profileStore),
-              const SizedBox(height: 40,),
+              const SizedBox(
+                height: 40,
+              ),
               EditProfileButton(profileStore: _profileStore),
               ProfileDataForm(profileStore: _profileStore),
             ],

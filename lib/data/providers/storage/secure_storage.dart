@@ -14,6 +14,10 @@ class SecureStorage {
 
   factory SecureStorage() => _instance;
 
+  Future<void> clean() {
+    return _flutterSecureStorage.deleteAll();
+  }
+
   Future<void> saveUserToken(String token) async {
     await _flutterSecureStorage.write(key: _userTokenKey, value: token);
   }

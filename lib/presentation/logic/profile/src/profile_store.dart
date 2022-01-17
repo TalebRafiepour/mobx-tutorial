@@ -158,4 +158,10 @@ abstract class _ProfileStore with Store {
           'Error in loading data from server!');
     }
   }
+
+  //logout
+
+  Future<void> logOut(){
+    return _profileRepository.logOut();
+  }
 }
