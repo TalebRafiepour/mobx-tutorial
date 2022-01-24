@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:todo_mobx/data/models/profile/profile_response.dart';
 import 'package:todo_mobx/data/providers/api/profile_api.dart';
-import 'package:todo_mobx/data/providers/storage/secure_storage.dart';
+import 'package:todo_mobx/data/providers/storage/secure/secure_storage.dart';
 
 class ProfileRepository {
   final ProfileApi _profileApi;

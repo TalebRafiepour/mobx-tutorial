@@ -32,6 +32,12 @@ dependencies:
   validators: ^3.0.0
   #dependency injection
   get_it: ^7.2.0
+  #shared preferences
+  shared_preferences: ^2.0.12
+  #localizations
+  intl: ^0.17.0
+  flutter_localizations:
+    sdk: flutter
 
 
 dev_dependencies:
@@ -49,33 +55,5 @@ flutter:
  
   uses-material-design: true
 
- 
- 
- 
- 
-
- 
- 
-
- 
- 
-
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+flutter_intl:
+  enabled: true

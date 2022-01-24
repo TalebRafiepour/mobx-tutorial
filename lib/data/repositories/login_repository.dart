@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:todo_mobx/data/providers/api/user_api.dart';
-import 'package:todo_mobx/data/providers/storage/secure_storage.dart';
+import 'package:todo_mobx/data/providers/storage/secure/secure_storage.dart';
 
 class LoginRepository {
   final UserApi _userApi;

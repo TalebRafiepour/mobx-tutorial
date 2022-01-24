@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todo_mobx/data/providers/storage/secure_storage.dart';
+import 'package:todo_mobx/data/providers/storage/secure/secure_storage.dart';
 import 'package:todo_mobx/presentation/screens/home/home_screen.dart';
 import 'package:todo_mobx/presentation/screens/login/login_screen.dart';
 
@@ -13,7 +13,8 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+      await Future.delayed(const Duration(seconds: 3));
       SecureStorage().isUserLogin().then((isUserLogin) {
         if (isUserLogin) {
           Navigator.pushReplacement(
