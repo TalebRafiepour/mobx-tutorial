@@ -105,6 +105,7 @@ abstract class _SignUpStore with Store {
       await _registerRepository.registerUser(name, email, password, age);
       signUpState = const SignUpState.registered();
     } catch (e, s) {
+      print('error: $e  ,s: $s');
       signUpState = const SignUpState.notRegistered('Error in registration!');
     }
   }

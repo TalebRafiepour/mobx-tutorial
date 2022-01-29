@@ -89,6 +89,33 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(
                   height: 15,
                 ),
+
+                SizedBox(
+                  width: double.infinity,
+                  height: 42,
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.login),
+                      onPressed: () {
+                        _loginStore.loginWithGoogle();
+                      },
+                      label: const Text('Login with Google')),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  height: 42,
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.facebook_rounded),
+                      onPressed: () {
+                        _loginStore.loginWithFacebook();
+                      },
+                      label: const Text('Login with Facebook')),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
                 SizedBox(
                   width: double.infinity,
                   height: 42,

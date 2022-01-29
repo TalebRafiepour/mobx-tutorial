@@ -38,6 +38,10 @@ dependencies:
   intl: ^0.17.0
   flutter_localizations:
     sdk: flutter
+  #google signin
+  google_sign_in: ^5.2.3
+  #facebook signin
+  flutter_facebook_auth: ^4.0.1
 
 
 dev_dependencies:
