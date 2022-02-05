@@ -16,4 +16,13 @@ class MPreferences {
     print('selected language code: $languageCode');
     return languageCode;
   }
+
+  Future<void> setThemeMode(String themeMode) async {
+    (await _preferences).setString(_theme, themeMode);
+  }
+
+  Future<String> getThemeMode() async {
+    final themeMode = (await _preferences).getString(_theme) ?? 'system';
+    return themeMode;
+  }
 }

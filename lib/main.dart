@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:todo_mobx/core/app_theme/app_theme.dart';
 import 'package:todo_mobx/core/consts/m_consts.dart';
 import 'package:todo_mobx/generated/l10n.dart';
 import 'package:todo_mobx/locator.dart';
@@ -33,9 +34,7 @@ class _MyAppState extends State<MyApp> {
     return Observer(builder: (context) {
       return MaterialApp(
         title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
+        theme: AppTheme.getTheme(_settingsStore.themeMode),
         localizationsDelegates: const [
           S.delegate,
           GlobalMaterialLocalizations.delegate,

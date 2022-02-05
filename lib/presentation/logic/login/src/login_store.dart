@@ -21,6 +21,9 @@ abstract class _LoginStore with Store {
   String password = '';
 
   @observable
+  bool obscurePassword = true;
+
+  @observable
   LoginState loginState = LoginState.unAuthenticated;
 
   Future<void> loginWithGoogle() async {

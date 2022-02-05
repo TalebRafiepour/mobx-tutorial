@@ -39,6 +39,21 @@ mixin _$LoginStore on _LoginStore, Store {
     });
   }
 
+  final _$obscurePasswordAtom = Atom(name: '_LoginStore.obscurePassword');
+
+  @override
+  bool get obscurePassword {
+    _$obscurePasswordAtom.reportRead();
+    return super.obscurePassword;
+  }
+
+  @override
+  set obscurePassword(bool value) {
+    _$obscurePasswordAtom.reportWrite(value, super.obscurePassword, () {
+      super.obscurePassword = value;
+    });
+  }
+
   final _$loginStateAtom = Atom(name: '_LoginStore.loginState');
 
   @override
@@ -66,6 +81,7 @@ mixin _$LoginStore on _LoginStore, Store {
     return '''
 email: ${email},
 password: ${password},
+obscurePassword: ${obscurePassword},
 loginState: ${loginState}
     ''';
   }

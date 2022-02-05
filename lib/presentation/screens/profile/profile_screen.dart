@@ -38,7 +38,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     MaterialPageRoute(builder: (_) => const LoginScreen()),
                     (route) => false);
               },
-              icon: const Icon(Icons.logout)),
+              icon:
+                  Icon(Icons.logout, color: Theme.of(context).iconTheme.color)),
         ],
       ),
       body: Center(

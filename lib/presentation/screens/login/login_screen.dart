@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
+import 'package:todo_mobx/core/app_theme/app_theme.dart';
 import 'package:todo_mobx/data/repositories/login_repository.dart';
 import 'package:todo_mobx/locator.dart';
 import 'package:todo_mobx/presentation/logic/login/index.dart';
@@ -62,20 +64,42 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 TextField(
                   keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(hintText: 'Email'),
+                  decoration: InputDecoration(
+                    prefixIcon:
+                        AppTheme.textFieldPrefixIcon(const Text('Username')),
+                    prefixIconConstraints: AppTheme.textFieldPrefixConstraint,
+                  ),
                   onChanged: (value) {
                     _loginStore.email = value;
                   },
                 ),
-                TextField(
-                  obscureText: true,
-                  decoration: const InputDecoration(hintText: 'Password'),
-                  onChanged: (value) {
-                    _loginStore.password = value;
-                  },
-                ),
                 const SizedBox(
-                  height: 15,
+                  height: 20,
+                ),
+                Observer(builder: (context) {
+                  return TextField(
+                    obscureText: _loginStore.obscurePassword,
+                    decoration: InputDecoration(
+                      prefixIcon:
+                          AppTheme.textFieldPrefixIcon(const Text('Password')),
+                      prefixIconConstraints: AppTheme.textFieldPrefixConstraint,
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          _loginStore.obscurePassword =
+                              !_loginStore.obscurePassword;
+                        },
+                        icon: _loginStore.obscurePassword
+                            ? const Icon(Icons.visibility_off)
+                            : const Icon(Icons.visibility),
+                      ),
+                    ),
+                    onChanged: (value) {
+                      _loginStore.password = value;
+                    },
+                  );
+                }),
+                const Spacer(
+                  flex: 10,
                 ),
                 SizedBox(
                   width: double.infinity,
@@ -89,12 +113,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(
                   height: 15,
                 ),
-
                 SizedBox(
                   width: double.infinity,
                   height: 42,
                   child: ElevatedButton.icon(
-                    icon: const Icon(Icons.login),
+                      icon: const Icon(Icons.login),
                       onPressed: () {
                         _loginStore.loginWithGoogle();
                       },
@@ -107,11 +130,30 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: double.infinity,
                   height: 42,
                   child: ElevatedButton.icon(
-                    icon: const Icon(Icons.facebook_rounded),
+                      style: Theme.of(context)
+                          .elevatedButtonTheme
+                          .style
+                          ?.copyWith(
+                            backgroundColor:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? MaterialStateProperty.all(Colors.white)
+                                    : null,
+                          ),
+                      icon: Icon(
+                        Icons.facebook_rounded,
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.black
+                            : null,
+                      ),
                       onPressed: () {
                         _loginStore.loginWithFacebook();
                       },
-                      label: const Text('Login with Facebook')),
+                      label: Text(
+                        'Login with Facebook',
+                        style: Theme.of(context).brightness == Brightness.dark
+                            ? const TextStyle(color: Colors.black)
+                            : null,
+                      )),
                 ),
                 const SizedBox(
                   height: 15,
@@ -126,13 +168,18 @@ class _LoginScreenState extends State<LoginScreen> {
                           shadowColor:
                               MaterialStateProperty.all(Colors.transparent)),
                       onPressed: () {
-                        Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => const SignUpScreen()));
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => const SignUpScreen()));
                       },
-                      child: const Text(
+                      child: Text(
                         'SignUp',
-                        style: TextStyle(color: Colors.black),
+                        style: Theme.of(context).brightness == Brightness.dark
+                            ? const TextStyle(color: Colors.white)
+                            : const TextStyle(color: Colors.black),
                       )),
+                ),
+                const Spacer(
+                  flex: 2,
                 ),
               ],
             ),

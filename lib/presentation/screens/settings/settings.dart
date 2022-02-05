@@ -4,6 +4,7 @@ import 'package:todo_mobx/generated/l10n.dart';
 import 'package:todo_mobx/locator.dart';
 import 'package:todo_mobx/presentation/logic/settings/index.dart';
 import 'package:todo_mobx/presentation/screens/settings/widgets/select_language_popup.dart';
+import 'package:todo_mobx/presentation/screens/settings/widgets/select_theme_popup.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -40,10 +41,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   }),
                   onTap: () {
                     showModalBottomSheet(
-                        context: context,
-                        builder: (_) => SelectLanguagePopup(
-                              settingsStore: _settingsStore,
-                            ));
+                      context: context,
+                      builder: (_) => SelectLanguagePopup(
+                        settingsStore: _settingsStore,
+                      ),
+                    );
                   },
                 ),
                 const Divider(
@@ -53,9 +55,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ],
             );
           } else if (index == 1) {
-            return const ListTile(
-              title: Text('Theme'),
-              trailing: Text('system'),
+            return ListTile(
+              title: const Text('Theme'),
+              trailing: Observer(builder: (context) {
+                return Text(_settingsStore.themeMode.toString());
+              }),
+              onTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (_) => SelectThemePopup(
+                    settingsStore: _settingsStore,
+                  ),
+                );
+              },
             );
           } else {
             return Container();

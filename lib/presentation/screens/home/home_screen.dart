@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
         appBar: AppBar(
           actions: [
             IconButton(
-              icon: const Icon(Icons.supervised_user_circle_rounded),
+              icon: Icon(Icons.supervised_user_circle_rounded,color: Theme.of(context).iconTheme.color,),
               onPressed: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (_) => const ProfileScreen()));
@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
             )
           ],
           leading: IconButton(
-            icon: const Icon(Icons.settings),
+            icon: Icon(Icons.settings,color: Theme.of(context).iconTheme.color),
             onPressed: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (_) => const SettingsScreen()));
