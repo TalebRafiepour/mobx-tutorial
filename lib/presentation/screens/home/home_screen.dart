@@ -3,6 +3,7 @@ import 'package:mobx/mobx.dart';
 import 'package:todo_mobx/data/models/login/src/user_model.dart';
 import 'package:todo_mobx/data/providers/storage/secure/secure_storage.dart';
 import 'package:todo_mobx/presentation/logic/home/src/home_store.dart';
+import 'package:todo_mobx/presentation/screens/map/map_screen.dart';
 import 'package:todo_mobx/presentation/screens/profile/profile_screen.dart';
 import 'package:todo_mobx/presentation/screens/settings/settings.dart';
 
@@ -51,7 +52,10 @@ class _HomeScreenState extends State<HomeScreen> {
         appBar: AppBar(
           actions: [
             IconButton(
-              icon: Icon(Icons.supervised_user_circle_rounded,color: Theme.of(context).iconTheme.color,),
+              icon: Icon(
+                Icons.supervised_user_circle_rounded,
+                color: Theme.of(context).iconTheme.color,
+              ),
               onPressed: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (_) => const ProfileScreen()));
@@ -59,7 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
             )
           ],
           leading: IconButton(
-            icon: Icon(Icons.settings,color: Theme.of(context).iconTheme.color),
+            icon:
+                Icon(Icons.settings, color: Theme.of(context).iconTheme.color),
             onPressed: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (_) => const SettingsScreen()));
@@ -84,6 +89,13 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             TodoList(homeStore: homeStore),
           ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => const MapScreen()));
+          },
+          child: const Icon(Icons.map),
         ),
       ),
     );

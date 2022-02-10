@@ -42,6 +42,10 @@ dependencies:
   google_sign_in: ^5.2.3
   #facebook signin
   flutter_facebook_auth: ^4.0.1
+  #google map
+  google_maps_flutter: ^2.1.1
+  geocoding: ^2.0.2
+
 
 
 dev_dependencies:
