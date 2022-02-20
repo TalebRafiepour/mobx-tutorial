@@ -7,8 +7,12 @@ import 'package:todo_mobx/generated/l10n.dart';
 import 'package:todo_mobx/locator.dart';
 import 'package:todo_mobx/presentation/logic/settings/index.dart';
 import 'package:todo_mobx/presentation/screens/splash/splash_screen.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:todo_mobx/core/keys/.env.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey = stripePublishableKey;
   setup();
   runApp(const MyApp());
 }

@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:todo_mobx/core/keys/.env.dart';
 import 'package:todo_mobx/data/models/profile/profile_response.dart';
 import 'package:todo_mobx/services/http_client/index.dart';
 
@@ -11,6 +12,23 @@ class ProfileApi {
   final HttpClient _httpClient;
 
   ProfileApi(this._httpClient);
+
+  Future<dynamic> createPaymentIntent(int amount, String currency) async {
+    final Map<String, dynamic> _jsonData = {
+      "amount": amount,
+      "currency": currency,
+      "payment_method_types[]": "card"
+    };
+
+    final Response<dynamic> result = await _httpClient.post(
+        path: 'https://api.stripe.com/v1/payment_intents',
+        data: _jsonData,
+        options: Options(headers: {
+          'Authorization': 'Bearer $stripeSecretKey',
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }));
+    return result.data;
+  }
 
   Future<ProfileResponse> getUserData(String token) async {
     final Response<dynamic> response = await _httpClient.get(

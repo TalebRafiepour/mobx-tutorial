@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:mobx/mobx.dart';
 import 'package:todo_mobx/data/models/login/src/user_model.dart';
 import 'package:todo_mobx/data/repositories/profile_repository.dart';
@@ -31,6 +32,17 @@ abstract class _ProfileStore with Store {
   @computed
   int get age => userData?.age ?? 0;
 
+  @action
+  Future<void> doPayment(int amount, String currency) async {
+    final paymentInitializedSuccessfully =
+        await _profileRepository.doPayment(amount, currency);
+    if (paymentInitializedSuccessfully) {
+      Stripe.instance.presentPaymentSheet();
+    } else {
+      //show error alert
+      print('Payment failed!');
+    }
+  }
 
   String? emailValidator(String? email) {
     if (email == null || email.isEmpty) {
@@ -44,10 +56,9 @@ abstract class _ProfileStore with Store {
 
   @action
   void saveEmail(String? email) {
-    if(email == null || email.isEmpty) return;
+    if (email == null || email.isEmpty) return;
     userData = userData?.copyWith(email: email);
   }
-
 
   String? nameValidator(String? name) {
     if (name == null || name.isEmpty) {
@@ -61,7 +72,7 @@ abstract class _ProfileStore with Store {
 
   @action
   void saveName(String? name) {
-    if(name == null || name.isEmpty) return;
+    if (name == null || name.isEmpty) return;
     userData = userData?.copyWith(firstName: name);
   }
 
@@ -77,7 +88,7 @@ abstract class _ProfileStore with Store {
 
   @action
   void saveAge(String? age) {
-    if(age == null || age.isEmpty) return;
+    if (age == null || age.isEmpty) return;
     userData = userData?.copyWith(age: int.parse(age));
   }
 
@@ -145,7 +156,8 @@ abstract class _ProfileStore with Store {
   Future<void> putUserData() async {
     try {
       profileUserDataState = const ProfileUserDataState.loading();
-      final profileResponse = await _profileRepository.putUserData(email, name, age);
+      final profileResponse =
+          await _profileRepository.putUserData(email, name, age);
       userData = UserModel(
           id: profileResponse.id,
           firstName: profileResponse.name,
@@ -161,7 +173,7 @@ abstract class _ProfileStore with Store {
 
   //logout
 
-  Future<void> logOut(){
+  Future<void> logOut() {
     return _profileRepository.logOut();
   }
 }

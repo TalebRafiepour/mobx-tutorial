@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:todo_mobx/data/models/profile/profile_response.dart';
 import 'package:todo_mobx/data/providers/api/profile_api.dart';
 import 'package:todo_mobx/data/providers/storage/secure/secure_storage.dart';
@@ -10,6 +11,26 @@ class ProfileRepository {
   final SecureStorage _secureStorage;
 
   ProfileRepository(this._profileApi, this._secureStorage);
+
+  Future<bool> doPayment(int amount, String currency) async {
+    try {
+      final paymentIntent =
+          await _profileApi.createPaymentIntent(amount, currency);
+      await Stripe.instance.initPaymentSheet(
+        paymentSheetParameters: SetupPaymentSheetParameters(
+          paymentIntentClientSecret: paymentIntent['client_secret'],
+          applePay: true,
+          googlePay: true,
+          merchantCountryCode: 'US',
+          merchantDisplayName: 'Taleb',
+        ),
+      );
+      return true;
+    } catch (e, s) {
+      print('error: $e,$s');
+      return false;
+    }
+  }
 
   Future<void> logOut() async {
     final token = await _secureStorage.getUserToken() ?? '';

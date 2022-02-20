@@ -56,6 +56,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               EditProfileButton(profileStore: _profileStore),
               ProfileDataForm(profileStore: _profileStore),
+              ElevatedButton.icon(onPressed: () {
+                _profileStore.doPayment(50 * 100, 'USD');
+              }, icon: const Icon(Icons.payment), label: const Text('Pay \$50 for test')),
             ],
           ),
         ),
