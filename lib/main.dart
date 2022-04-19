@@ -1,3 +1,5 @@
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'package:cron/cron.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -13,14 +15,12 @@ import 'package:todo_mobx/generated/l10n.dart';
 import 'package:todo_mobx/locator.dart';
 import 'package:todo_mobx/presentation/logic/settings/index.dart';
 import 'package:todo_mobx/presentation/screens/splash/splash_screen.dart';
+import 'package:todo_mobx/services/local_notification/local_notification.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   print('Handling a background message ${message.messageId}');
 }
-
-late final AndroidNotificationChannel channel;
-late final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
 const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAEkbCxwe4WH2wv5GzH7I9FUmwv7pWdhVw',
@@ -30,6 +30,21 @@ const FirebaseOptions android = FirebaseOptions(
     androidClientId:
         '936389769150-q2f26lh3qd9grs4qa9a367hv9805tbo3.apps.googleusercontent.com');
 
+void backgroundTask() async {
+  await LocalNotification().init();
+  LocalNotification().show(
+    'id'.hashCode,
+    'title',
+    'body',
+    const NotificationDetails(
+      android: AndroidNotificationDetails(channelId, channelName,
+          icon: 'launch_background'),
+    ),
+  );
+  // Cron().schedule(Schedule(minutes: '*/20'), () {
+  // });
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -37,30 +52,20 @@ void main() async {
   await Firebase.initializeApp(options: android);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  //create android notification channel
-  channel = const AndroidNotificationChannel(
-    'high_importance_channel', // id
-    'High Importance Notifications', // title
-    importance: Importance.high,
-  );
-
-  flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel);
-
-  const androidInitializeSettings =
-  AndroidInitializationSettings('launch_background');
-  const iosInitializationSettings = IOSInitializationSettings();
-  const initializationSettings = InitializationSettings(
-      android: androidInitializeSettings, iOS: iosInitializationSettings);
-  flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  //init local notification
+  LocalNotification().init();
 
   Stripe.publishableKey = stripePublishableKey;
   setup();
+
+  await AndroidAlarmManager.initialize();
+
   runApp(const MyApp());
+
+  const int helloAlarmID = 0;
+  await AndroidAlarmManager.oneShotAt(time, id, callback)
+  await AndroidAlarmManager.oneShot(
+      const Duration(seconds: 1), helloAlarmID, backgroundTask);
 }
 
 class MyApp extends StatefulWidget {
@@ -94,18 +99,16 @@ class _MyAppState extends State<MyApp> {
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
       if (notification != null && android != null && !kIsWeb) {
-        flutterLocalNotificationsPlugin.show(
+        LocalNotification().show(
           notification.hashCode,
           notification.title,
           notification.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              icon: 'launch_background'
-              // TODO add a proper drawable resource to android, for now using
-              //      one that already exists in example app.
-            ),
+          const NotificationDetails(
+            android: AndroidNotificationDetails(channelId, channelName,
+                icon: 'launch_background'
+                // TODO add a proper drawable resource to android, for now using
+                //      one that already exists in example app.
+                ),
           ),
         );
       }
