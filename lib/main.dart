@@ -63,7 +63,7 @@ void main() async {
   runApp(const MyApp());
 
   const int helloAlarmID = 0;
-  await AndroidAlarmManager.oneShotAt(time, id, callback)
+  //await AndroidAlarmManager.oneShotAt(time, id, callback)
   await AndroidAlarmManager.oneShot(
       const Duration(seconds: 1), helloAlarmID, backgroundTask);
 }
